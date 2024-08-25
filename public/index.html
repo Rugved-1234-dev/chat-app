@@ -19,17 +19,15 @@
 
       body {
         font-family: "Open Sans", sans-serif;
-        /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
+
         display: grid;
         place-items: center;
-        background-color: #ebebeb;
+        background-color: #130202;
       }
 
       .title {
         margin: 20px 0;
+        color: whitesmoke;
       }
 
       .main {
@@ -154,7 +152,7 @@
     <title>Chat app</title>
   </head>
   <body>
-    <h1 class="title">iChat 💬</h1>
+    <h1 class="title">Chat App 💬</h1>
     <div class="main">
       <div class="name">
         <span><i class="far fa-user"></i></span>
@@ -167,26 +165,7 @@
         />
       </div>
 
-      <ul class="message-container" id="message-container">
-        <!-- These li elements are only for reference, and therefore, they are commented out... -->
-        <!-- <li class="message-left">
-          <p class="message">
-            lorem impsun
-            <span>bluebird ● 26 July 10:40</span>
-          </p>
-        </li>
-
-        <li class="message-right">
-          <p class="message">
-            lorem impsun
-            <span>bluebird ● 26 July 10:40</span>
-          </p>
-        </li>
-
-        <li class="message-feedback">
-          <p class="feedback" id="feedback">✍️ killer is typing a message...</p>
-        </li> -->
-      </ul>
+      <ul class="message-container" id="message-container"></ul>
 
       <form class="message-form" id="message-form">
         <input
@@ -204,11 +183,7 @@
     <h3 class="clients-total" id="client-total">Total clients: 2</h3>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.28.0/moment.min.js"
-      integrity="sha512-Q1f3TS3vSt1jQ8AwP2OuenztnLU6LwxgyyYOG1jgMW/cbEMHps/3wjvnl1P3WTrF3chJUWEoxDUEjMxDV8pujg=="
-      crossorigin="anonymous"
-    ></script>
+
     <script>
       const socket = io();
 
@@ -218,8 +193,6 @@
       const nameInput = document.getElementById("name-input");
       const messageForm = document.getElementById("message-form");
       const messageInput = document.getElementById("message-input");
-
-      const messageTone = new Audio("/message-tone.mp3");
 
       messageForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -232,7 +205,6 @@
 
       function sendMessage() {
         if (messageInput.value === "") return;
-        // console.log(messageInput.value)
         const data = {
           name: nameInput.value,
           message: messageInput.value,
@@ -244,8 +216,6 @@
       }
 
       socket.on("chat-message", (data) => {
-        // console.log(data)
-        messageTone.play();
         addMessageToUI(false, data);
       });
 
@@ -255,7 +225,11 @@
       <li class="${isOwnMessage ? "message-right" : "message-left"}">
           <p class="message">
             ${data.message}
-            <span>${data.name} ● ${moment(data.dateTime).fromNow()}</span>
+            <span>${data.name} ● ${new Date(
+          data.dateTime
+        ).toLocaleTimeString(
+          "en-US",
+        )}</span>
           </p>
         </li>
         `;
